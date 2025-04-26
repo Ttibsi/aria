@@ -1,0 +1,84 @@
+<program> ::= <top_level> ( <NL> <top_level> )* <EOF>
+<top_level> ::= <function> | <class> | <enumeration> | <import_statement>
+
+<class> ::= class <identifier> <opt_inheritance> "{"  <attributes> <method_group> "}"
+<opt_inheritance> ::= "" | : <identifier>
+<attributes> ::= <typed_identifier> ";" | <attributes> <typed_identifier> ";"
+<method_group> ::= <method> <method_group> | <static_method> <method_group>
+<method> ::= <function>
+<static_method> ::= static <function>
+
+<enumeration> ::= enum <identifier> "{" { <identifier> { "," <identifier> } } "}" ";"
+<function> ::= <opt_export> func <identifier>"("{ <typed_identifier>, }")" <type> "{"{ <expression> } <return_expression> "}"
+<opt_export> ::= export | ""
+
+<import_statement> ::= <basic_import_statement> | <scoped_import_statement>
+<basic_import_statement> ::= import <identifier> ";"
+<scoped_import_statement> ::= import <identifier>::"{" { <identifier> } "}" ";"
+
+<switch_statement> ::= switch (<identifier>) "{" <case_statement_list> "}"
+<case_statement_list> ::= { <case_statement> } <default_statement>
+<case_statement> ::= case (<value>) "{" <expression_list> "}"
+<default_statement> ::= default "{" <expression_list> "}"
+
+<for_statement> ::= for (<var> <conditional> <expression>) "{" <expression_list> "}"
+<if_statement> ::= if "(" <conditional> ")" "{" <expression_list> "}"
+<while_statement> ::= while "(" <conditional> ")" "{" <expression_list> "}"
+
+<var> ::= var <identifier>: <type> = <expression> ";" <EOL>
+<value> ::= <string> | <number> | <boolean> | <char>
+<typed_identifier> ::= <identifier> ":" <type>
+<optional_type> ::= <type>?
+<base_type> ::= int | float | bool | char | str | map | array | <identifier>
+<type> ::= <base_type> [ "[" <type> { "," <type> } "]" ]
+
+<expression_list> ::= <expression> | <expression_list> <expression>
+<expression> ::= <ternary_expression> | <binary_expression> | <unary_expression> | <return_statement> | <func_call> | <value> ";"
+<ternary_expression> ::= <conditional> ? <value> : <value>
+<binary_expression> ::= <conditional> | <and_expression> | <or_expression> | <bracketted_expression> | <mod_expression> | <mul_div_expression> | <add_sub_expression> | <assignment_expression>
+<conditional> ::= <value> <CompOp> <value>
+<and_expression> ::= <expression> && <expression>
+<or_expression> ::= <expression> "||" <expression>
+<bracketted_expression> ::= "(" <expression> ")"
+<mod_expression> ::= <expression> ^ <expression>
+<mul_div_expression> ::= <expression> * <expression> | <expression> / <expression>
+<add_sub_expression> ::= <expression> + <expression> | <expression> - <expression>
+<assignment_expression> ::= <identifier> = <expression>
+
+<func_call> ::= <identifier>( {<identifier>} )
+<return_statement> ::= return <expression> ";"
+
+<keyword> ::= break | case | class | continue | default | else | enum | export | func | if | import | return | static | switch | var | while
+<identifier> ::= <letter> { <letter> | <digit> | "_" } ";"
+<comment> ::= "#" { <char> } <EOL>
+
+<UnOp> ::= ++ | -- | - | !
+<CompOp> ::= == | != | <= | < | >= | >
+
+<string> ::= " { <letter> | <number> | <symbol> } "
+<char> ::= ' <letter> | <number> | <symbol> '
+<boolean> ::= true | false
+
+<number> ::= decimal_number> | <hex_literal> | <bin_literal> | <oct_literal>
+<hex-literal> ::= "0x" <hex-digits>
+<hex-digits> ::= <hex-digit> | <hex-digit> <hex-digits>
+<hex-digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+              | "a" | "b" | "c" | "d" | "e" | "f"
+              | "A" | "B" | "C" | "D" | "E" | "F"
+
+<binary-literal> ::= "0b" <binary-digits>
+<binary-digits> ::= <binary-digit> | <binary-digit> <binary-digits>
+<binary-digit> ::= "0" | "1"
+
+<octal-literal> ::= "0o" <octal-digits>
+<octal-digits> ::= <octal-digit> | <octal-digit> <octal-digits>
+<octal-digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7"
+
+<decimal_number> ::= <digit> | <decimal_number> <digit> .
+<digit> ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+<NL> ::= "\n" | "\r\n"
+<letter> ::= <uppercase_letter> | <lowercase_letter>
+<uppercase_letter> ::= A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z
+<lowercase_letter> ::= a | b | c | d | e | f | g | h | i | j | k | l | m | n | o | p | q | r | s | t | u | v | w | x | y | z
+<symbol> ::= "\"" | "\\" | "'" | "<" | ">" | "," | "." | ";" | ":" | "'" | "@" | "?" | "/" | "{" | "[" | "]" | "}" | "!" | "£" | "$" | "%" | "^" | "&" | "*" | "(" | ")" | "-" | "_" | "=" | "+" | "|"
