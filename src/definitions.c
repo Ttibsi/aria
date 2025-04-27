@@ -35,5 +35,13 @@ const char *tok_to_str(Token_type tok) {
     case TOK_FUNCTION: return "FUNCTION";
     case TOK_STRING_LITERAL: return "STRING";
     case TOK_BUILTIN: return "BUILTIN";
+    case TOK_LBRACE: return "LBRACE";
+    case TOK_RBRACE: return "RBRACE";
+    case TOK_COLON: return "COLON";
+    case TOK_SEMI: return "SEMI";
+    case TOK_LBRACKET: return "LBRACKET";
+    case TOK_RBRACKET: return "RBRACKET";
+    case TOK_LPAREN: return "LPAREN";
+    case TOK_RPAREN: return "RPAREN";
     }
 }

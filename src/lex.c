@@ -60,15 +60,18 @@ void lex(Token_array *t, char *contents, size_t contents_len) {
             } else {
                  in_string = 1;
             }
-        }
 
-
-        if (isspace(text[0])) {
+        } else if (isspace(text[0])) {
             text[0] = '\0';
             text_len = 0;
 
-        // next char is a symbol
-        } else if (!(isalpha(contents[i + 1]) || isdigit(contents[i + 1]))) {
+        // function
+        } else if (contents[i + 1] == '(') {
+            Token_array_append(t, (Token){TOK_FUNCTION, strdup(text)});
+            text[0] = '\0';
+            text_len = 0;
+
+        } else if (contents[i + 1] == ' ') {
 
             // Keyword
             for (size_t j = 0; j < Keywords_len; j++) {
@@ -79,39 +82,72 @@ void lex(Token_array *t, char *contents, size_t contents_len) {
                     break;
                 }
             }
-            if (text_len == 0) { continue; }
 
-           // Builtins
-           for (size_t j = 0; j < builtins_len; j++) {
-               if (strcmp(builtins[j], text) == 0) {
-                    Token_array_append(t, (Token){TOK_BUILTIN, strdup(text)});
+            if (text_len) {
+                // Builtins
+                for (size_t j = 0; j < builtins_len; j++) {
+                    if (strcmp(builtins[j], text) == 0) {
+                        Token_array_append(t, (Token){TOK_BUILTIN, strdup(text)});
+                        text[0] = '\0';
+                        text_len = 0;
+                        break;
+                    }
+                }
+
+                if (text_len) {
+                    if (isnumber(text)) {
+                        Token_array_append(t, (Token){TOK_NUMERIC_LITERAL, strdup(text)});
+                        text[0] = '\0';
+                        text_len = 0;
+                    }
+                }
+            }
+
+        } else {
+
+            // Symbols
+            switch (contents[i]) {
+                case '{':
+                    Token_array_append(t, (Token){TOK_LBRACE, strdup(text)});
                     text[0] = '\0';
                     text_len = 0;
                     break;
-               }
+                case '}':
+                    Token_array_append(t, (Token){TOK_RBRACE, strdup(text)});
+                    text[0] = '\0';
+                    text_len = 0;
+                    break;
+                case ':':
+                    Token_array_append(t, (Token){TOK_COLON, strdup(text)});
+                    text[0] = '\0';
+                    text_len = 0;
+                    break;
+                case ';':
+                    Token_array_append(t, (Token){TOK_SEMI, strdup(text)});
+                    text[0] = '\0';
+                    text_len = 0;
+                    break;
+                case '[':
+                    Token_array_append(t, (Token){TOK_LBRACKET, strdup(text)});
+                    text[0] = '\0';
+                    text_len = 0;
+                    break;
+                case ']':
+                    Token_array_append(t, (Token){TOK_RBRACKET, strdup(text)});
+                    text[0] = '\0';
+                    text_len = 0;
+                    break;
+                case '(':
+                    Token_array_append(t, (Token){TOK_LPAREN, strdup(text)});
+                    text[0] = '\0';
+                    text_len = 0;
+                    break;
+                case ')':
+                    Token_array_append(t, (Token){TOK_RPAREN, strdup(text)});
+                    text[0] = '\0';
+                    text_len = 0;
+                    break;
             }
-            if (text_len == 0) { continue; }
-
-            if (isnumber(text)) {
-                Token_array_append(t, (Token){TOK_NUMERIC_LITERAL, strdup(text)});
-                text[0] = '\0';
-                text_len = 0;
-            } else if (contents[i + 1] == '(') {
-                Token_array_append(t, (Token){TOK_FUNCTION, strdup(text)});
-                text[0] = '\0';
-                text_len = 0;
-            }
-        }
-    } else {
-        switch (contents[i]) {
-            case '{':
-            case '}':
-            case ':':
-            case ';':
-            case '[':
-            case ']':
-            case '(':
-            case ')':
         }
     }
 }

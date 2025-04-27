@@ -15,6 +15,14 @@ typedef enum {
     TOK_FUNCTION,
     TOK_STRING_LITERAL,
     TOK_BUILTIN,
+    TOK_LBRACE,
+    TOK_RBRACE,
+    TOK_COLON,
+    TOK_SEMI,
+    TOK_LBRACKET,
+    TOK_RBRACKET,
+    TOK_LPAREN,
+    TOK_RPAREN,
 } Token_type;
 
 const char* tok_to_str(Token_type);
