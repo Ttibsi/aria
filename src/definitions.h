@@ -5,10 +5,16 @@
 
 extern const char* Keywords[];
 extern const size_t Keywords_len;
+extern const char* builtins[];
+extern const size_t builtins_len;
 
 typedef enum {
     TOK_KEYWORD,
-    TOK_IDENTIFIER
+    TOK_IDENTIFIER,
+    TOK_NUMERIC_LITERAL,
+    TOK_FUNCTION,
+    TOK_STRING_LITERAL,
+    TOK_BUILTIN,
 } Token_type;
 
 const char* tok_to_str(Token_type);
