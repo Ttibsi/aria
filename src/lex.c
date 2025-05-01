@@ -31,7 +31,7 @@ void Token_array_append(Token_array *t, Token item) {
 
 void Token_array_print(Token_array *t) {
     for (size_t i = 0; i < t->size; i++) {
-        printf("%s: (%s)\n", tok_to_str(t->items[i].type), t->items[i].value);
+        printf("%s: (\x1b[90m%s\x1b[0m)\n", tok_to_str(t->items[i].type), t->items[i].value);
     }
 }
 
