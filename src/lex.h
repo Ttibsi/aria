@@ -24,6 +24,6 @@ void Token_array_destroy(Token_array*);
 void Token_array_append(Token_array*, Token);
 void Token_array_print(Token_array*);
 
-void lex(Token_array*, char*, size_t);
+Token_array lex(char*, size_t);
 
 #endif // LEXER_H

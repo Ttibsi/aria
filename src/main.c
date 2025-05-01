@@ -13,20 +13,19 @@ int main(int argc, char **argv) {
         int fsize = ftell(f);
         rewind(f);
 
-        char *contents = (char *)malloc(sizeof(char) * fsize);
+        char *contents = (char *)malloc(sizeof(char) * fsize + 1);
         int content_size = 0;
 
         while (content_size < fsize) {
             content_size += fread(contents + content_size, 1, fsize, f);
         }
+        contents[content_size++] = '\0';
 
         fclose(f);
 
-        Token_array toks;
-        Token_array_create(&toks);
-        lex(&toks, contents, content_size);
-
+        Token_array toks = lex(contents, content_size);
         Token_array_print(&toks);
+        Token_array_destroy(&toks);
     }
     return 0;
 }

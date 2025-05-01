@@ -1,8 +1,8 @@
 CC := clang
-CFLAGS := -Wall -Wextra -std=c11 -Wimplicit-fallthrough -g -D_GNU_SOURCE
+CFLAGS := -Wall -Wextra -Wimplicit-fallthrough -g
 BIN := aria
 
-ifeq (0, 1)
+ifeq (1, 1)
 	san := -fsanitize=address,undefined
 endif
 
