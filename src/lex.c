@@ -5,10 +5,13 @@
 #include <stdio.h>
 #include <string.h>
 
-void Token_array_create(Token_array *t) {
-    t->capacity = 8;
-    t->size = 0;
-    t->items = malloc(sizeof(Token) * 8);
+Token_array Token_array_create() {
+    Token_array t;
+    t.capacity = 8;
+    t.size = 0;
+    t.items = malloc(sizeof(Token) * t.capacity);
+
+    return t;
 }
 
 void Token_array_destroy(Token_array *t) {
@@ -17,6 +20,7 @@ void Token_array_destroy(Token_array *t) {
     }
 
     free(t->items);
+    t->items = NULL;
     t->size = 0;
 }
 
@@ -44,8 +48,7 @@ int isnumber(const char* str) {
 }
 
 Token_array lex(char *contents, size_t contents_len) {
-    Token_array t;
-    Token_array_create(&t);
+    Token_array t = Token_array_create();
 
     char text[64];
     text[0] = '\0';
@@ -56,63 +59,8 @@ Token_array lex(char *contents, size_t contents_len) {
         text[text_len] = contents[i];
         text[++text_len] = '\0';
 
-        // string literals
-        if (contents[i] == '"') {
-            if (in_string) {
-                 Token_array_append(&t, (Token){TOK_STRING_LITERAL, strdup(text)});
-                 text[0] = '\0';
-                 text_len = 0;
-                 in_string = 0;
-                 continue;
-            } else {
-                 in_string = 1;
-            }
-
-        } else if (isspace(text[0])) {
-            text[0] = '\0';
-            text_len = 0;
-
-        // function
-        } else if (contents[i+1] != '\0' && contents[i + 1] == '(') {
-            Token_array_append(&t, (Token){TOK_FUNCTION, strdup(text)});
-            text[0] = '\0';
-            text_len = 0;
-
-        } else if (contents[i + 1] != '\0' && contents[i + 1] == ' ') {
-
-            // Keyword
-            for (size_t j = 0; j < Keywords_len; j++) {
-                if (strcmp(Keywords[j], text) == 0) {
-                    Token_array_append(&t, (Token){TOK_KEYWORD, strdup(text)});
-                    text[0] = '\0';
-                    text_len = 0;
-                    break;
-                }
-            }
-
-            if (text_len) {
-                // Builtins
-                for (size_t j = 0; j < builtins_len; j++) {
-                    if (strcmp(builtins[j], text) == 0) {
-                        Token_array_append(&t, (Token){TOK_BUILTIN, strdup(text)});
-                        text[0] = '\0';
-                        text_len = 0;
-                        break;
-                    }
-                }
-
-                if (text_len) {
-                    if (isnumber(text)) {
-                        Token_array_append(&t, (Token){TOK_NUMERIC_LITERAL, strdup(text)});
-                        text[0] = '\0';
-                        text_len = 0;
-                    }
-                }
-            }
-
-        } else {
-
-            // Symbols
+        // Symbols
+        if (!in_string) {
             switch (contents[i]) {
                 case '{':
                     Token_array_append(&t, (Token){TOK_LBRACE, strdup(text)});
@@ -154,6 +102,62 @@ Token_array lex(char *contents, size_t contents_len) {
                     text[0] = '\0';
                     text_len = 0;
                     break;
+            }
+
+        }
+
+        // string literals
+        if (contents[i] == '"') {
+            if (in_string) {
+                 Token_array_append(&t, (Token){TOK_STRING_LITERAL, strdup(text)});
+                 text[0] = '\0';
+                 text_len = 0;
+                 in_string = 0;
+                 continue;
+            } else {
+                 in_string = 1;
+            }
+
+        } else if (isspace(text[0])) {
+            text[0] = '\0';
+            text_len = 0;
+
+        // function
+        } else if (contents[i + 1] == '(') {
+            Token_array_append(&t, (Token){TOK_FUNCTION, strdup(text)});
+            text[0] = '\0';
+            text_len = 0;
+
+        } else if (contents[i + 1] == ' ') {
+
+            // Keyword
+            for (size_t j = 0; j < Keywords_len; j++) {
+                if (strcmp(Keywords[j], text) == 0) {
+                    Token_array_append(&t, (Token){TOK_KEYWORD, strdup(text)});
+                    text[0] = '\0';
+                    text_len = 0;
+                    break;
+                }
+            }
+
+            if (text_len) {
+                // Builtins
+                for (size_t j = 0; j < builtins_len; j++) {
+                    if (strcmp(builtins[j], text) == 0) {
+                        Token_array_append(&t, (Token){TOK_BUILTIN, strdup(text)});
+                        text[0] = '\0';
+                        text_len = 0;
+                        break;
+                    }
+                }
+
+                if (text_len) {
+                    if (isnumber(text)) {
+                        Token_array_append(&t, (Token){TOK_NUMERIC_LITERAL, strdup(text)});
+                        text[0] = '\0';
+                        text_len = 0;
+                    }
+                }
             }
         }
     }

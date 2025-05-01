@@ -19,7 +19,7 @@ typedef struct {
 
 #define GROWTH_FACTOR 2
 
-void Token_array_create(Token_array*);
+Token_array Token_array_create();
 void Token_array_destroy(Token_array*);
 void Token_array_append(Token_array*, Token);
 void Token_array_print(Token_array*);
