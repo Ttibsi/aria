@@ -1,0 +1,3 @@
+CompileFlags:
+    Add: [-std=c11, -Wall, -D_GNU_SOURCE]
+    Compiler: /usr/bin/gcc
