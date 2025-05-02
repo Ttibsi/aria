@@ -2,9 +2,9 @@
 
 #include "lex.h"
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
     if (argc == 2) {
-        FILE *f = fopen(argv[1], "r");
+        FILE* f = fopen(argv[1], "r");
         if (!f) {
             return 1;
         }
@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
         int fsize = ftell(f);
         rewind(f);
 
-        char *contents = (char *)malloc(sizeof(char) * fsize + 1);
+        char* contents = (char*)malloc(sizeof(char) * fsize + 1);
         int content_size = 0;
 
         while (content_size < fsize) {

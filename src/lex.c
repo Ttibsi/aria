@@ -14,7 +14,7 @@ Token_array Token_array_create() {
     return t;
 }
 
-void Token_array_destroy(Token_array *t) {
+void Token_array_destroy(Token_array* t) {
     for (size_t i = 0; i < t->size; i++) {
         free(t->items[i].value);
     }
@@ -24,7 +24,7 @@ void Token_array_destroy(Token_array *t) {
     t->size = 0;
 }
 
-void Token_array_append(Token_array *t, Token item) {
+void Token_array_append(Token_array* t, Token item) {
     if (t->size == t->capacity) {
         t->items = realloc(t->items, t->size * GROWTH_FACTOR * sizeof(Token));
         t->capacity = t->size * GROWTH_FACTOR * sizeof(Token);
@@ -33,7 +33,7 @@ void Token_array_append(Token_array *t, Token item) {
     t->size++;
 }
 
-void Token_array_print(Token_array *t) {
+void Token_array_print(Token_array* t) {
     for (size_t i = 0; i < t->size; i++) {
         printf("%s: (\x1b[90m%s\x1b[0m)\n", tok_to_str(t->items[i].type), t->items[i].value);
     }
@@ -41,13 +41,15 @@ void Token_array_print(Token_array *t) {
 
 int isnumber(const char* str) {
     for (size_t i = 0; i < strlen(str); i++) {
-        if (!(isdigit(i) || i == '.')) { return 0; }
+        if (!(isdigit(i) || i == '.')) {
+            return 0;
+        }
     }
 
     return 1;
 }
 
-Token_array lex(char *contents, size_t contents_len) {
+Token_array lex(char* contents, size_t contents_len) {
     Token_array t = Token_array_create();
 
     char text[64];
@@ -103,33 +105,31 @@ Token_array lex(char *contents, size_t contents_len) {
                     text_len = 0;
                     break;
             }
-
         }
 
         // string literals
         if (contents[i] == '"') {
             if (in_string) {
-                 Token_array_append(&t, (Token){TOK_STRING_LITERAL, strdup(text)});
-                 text[0] = '\0';
-                 text_len = 0;
-                 in_string = 0;
-                 continue;
+                Token_array_append(&t, (Token){TOK_STRING_LITERAL, strdup(text)});
+                text[0] = '\0';
+                text_len = 0;
+                in_string = 0;
+                continue;
             } else {
-                 in_string = 1;
+                in_string = 1;
             }
 
         } else if (isspace(text[0])) {
             text[0] = '\0';
             text_len = 0;
 
-        // function
+            // function
         } else if (contents[i + 1] == '(') {
             Token_array_append(&t, (Token){TOK_FUNCTION, strdup(text)});
             text[0] = '\0';
             text_len = 0;
 
         } else if (contents[i + 1] == ' ') {
-
             // Keyword
             for (size_t j = 0; j < Keywords_len; j++) {
                 if (strcmp(Keywords[j], text) == 0) {
