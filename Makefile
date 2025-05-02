@@ -2,7 +2,7 @@ CC := clang
 CFLAGS := -Wall -Wextra -Wimplicit-fallthrough -g
 BIN := aria
 
-ifeq (1, 1)
+ifeq (0, 1)
 	san := -fsanitize=address,undefined
 endif
 
