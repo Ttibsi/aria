@@ -54,8 +54,8 @@ extern Errors e;
 
 void onetest_init(void);
 void onetest_exec(void);
-void error_append(const char*, int, float, char*, float);
-void error_str_append(const char*, int, char*, char*, char*);
+void error_append(const char*, int, float, const char*, float);
+void error_str_append(const char*, int, const char*, const char*, const char*);
 
 #ifdef ONETEST_IMPLEMENTATION
 #include <stdio.h>
@@ -95,7 +95,7 @@ Errors new_errors(void) {
     return e;
 }
 
-void error_append(const char* func, int line, float x, char* mid_text, float y) {
+void error_append(const char* func, int line, float x, const char* mid_text, float y) {
     if (e.size == e.cap) {
         e.items = realloc(e.items, e.cap * 2 * sizeof(char) * ONETEST_STR_LEN);
         e.cap = e.cap * 2;
@@ -108,7 +108,7 @@ void error_append(const char* func, int line, float x, char* mid_text, float y) 
     e.size++;
 }
 
-void error_str_append(const char* func, int line, char* x, char* mid_text, char* y) {
+void error_str_append(const char* func, int line, const char* x, const char* mid_text, const char* y) {
     if (e.size == e.cap) {
         e.items = realloc(e.items, e.cap * 2 * sizeof(char) * ONETEST_STR_LEN);
         e.cap = e.cap * 2;

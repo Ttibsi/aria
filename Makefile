@@ -28,8 +28,8 @@ test_objects := $(patsubst tests/%.c,build/%.o,$(test_sources))
 build/%.o: tests/%.c | build
 	$(CC) $< -c -MMD -MP -Iinclude -Isrc -o $@ $(CFLAGS) $(san)
 
-build/test_exe: $(test_objects) build/test.o
-	$(CC) $^ -o $@ $(san)
+build/test_exe: $(objects) $(test_objects) build/test.o
+	$(CC) $^ -Isrc -o $@ $(san)
 
 .PHONY: test
 test: build/test_exe
