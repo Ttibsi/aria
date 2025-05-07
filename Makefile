@@ -6,7 +6,7 @@ ifeq (0, 1)
 	san := -fsanitize=address,undefined
 endif
 
-sources := $(wildcard src/*.c)
+sources := $(filter-out src/main.c,$(wildcard src/*.c))
 objects := $(patsubst src/%.c,build/%.o,$(sources))
 
 .PHONY: all
@@ -18,12 +18,22 @@ build:
 build/%.o: src/%.c | build
 	$(CC) $< -c -MMD -MP -o $@ $(CFLAGS) $(san)
 
-$(BIN): $(objects)
+$(BIN): $(objects) build/main.o
+	$(CC) $^ -o $@ $(san)
+
+### Tests
+test_sources := $(wildcard tests/*.c)
+test_objects := $(patsubst tests/%.c,build/%.o,$(test_sources))
+
+build/%.o: tests/%.c | build
+	$(CC) $< -c -MMD -MP -Iinclude -Isrc -o $@ $(CFLAGS) $(san)
+
+build/test_exe: $(test_objects) build/test.o
 	$(CC) $^ -o $@ $(san)
 
 .PHONY: test
-test:
-	@echo "Tests TBD"
+test: build/test_exe
+	./build/test_exe
 
 .PHONY: clean
 clean:
