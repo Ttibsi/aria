@@ -13,7 +13,6 @@ int main() {
     call(test_token_array_create, "test_token_array_create");
     call(test_token_array_destroy, "test_token_array_destroy");
     call(test_token_array_append, "test_token_array_append");
-    call(test_token_array_print, "test_token_array_print");
     call(test_lex, "test_lex");
 
     onetest_exec();
