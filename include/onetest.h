@@ -37,6 +37,20 @@
     }\
 }
 
+#define assert_misc_eq(x, y) {\
+    if (x != y) { \
+        misc_error_append(__FUNCTION__, __LINE__); \
+        return 1;\
+    }\
+}
+
+#define assert_misc_ne(x, y) {\
+    if (x == y) { \
+        misc_error_append(__FUNCTION__, __LINE__); \
+        return 1;\
+    }\
+}
+
 typedef int (*func_ptr)(void);
 typedef struct {
     size_t size;
@@ -56,6 +70,7 @@ void onetest_init(void);
 void onetest_exec(void);
 void error_append(const char*, int, float, const char*, float);
 void error_str_append(const char*, int, const char*, const char*, const char*);
+void misc_error_append(const char*, int);
 
 #ifdef ONETEST_IMPLEMENTATION
 #include <stdio.h>
@@ -117,6 +132,19 @@ void error_str_append(const char* func, int line, const char* x, const char* mid
 
     char* out = malloc(sizeof(char) * ONETEST_STR_LEN);
     snprintf(out, strlen(mid_text) + strlen(x) + strlen(y) + strlen(func) + 3 + 5, "%s:%d %s %s %s", func, line, x, mid_text, y);
+    e.items[e.size] = out;
+    e.size++;
+}
+
+void misc_error_append(const char* func, int line) {
+    if (e.size == e.cap) {
+        e.items = realloc(e.items, e.cap * 2 * sizeof(char) * ONETEST_STR_LEN);
+        e.cap = e.cap * 2;
+    }
+
+
+    char* out = malloc(sizeof(char) * ONETEST_STR_LEN);
+    snprintf(out, strlen(func) + 3 + 27, "%s:%d Miscellaneous failure", func, line);
     e.items[e.size] = out;
     e.size++;
 }

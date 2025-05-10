@@ -36,5 +36,22 @@ int test_token_array_append(void) {
 }
 
 int test_lex(void) {
+    char* text = "func main() { print(\"hello world\"); }";
+    Token_array t = lex(text, strlen(text));
+
+    assert_num_eq(t.size, 10);
+    assert_misc_eq(t.items[0].type, TOK_KEYWORD);
+    assert_misc_eq(t.items[1].type, TOK_FUNCTION);
+    assert_misc_eq(t.items[2].type, TOK_LPAREN);
+    assert_misc_eq(t.items[3].type, TOK_RPAREN);
+    assert_misc_eq(t.items[4].type, TOK_LBRACE);
+    assert_misc_eq(t.items[5].type, TOK_FUNCTION);
+    assert_misc_eq(t.items[6].type, TOK_LPAREN);
+    assert_misc_eq(t.items[7].type, TOK_STRING_LITERAL);
+    assert_misc_eq(t.items[8].type, TOK_RPAREN);
+    assert_misc_eq(t.items[9].type, TOK_SEMI);
+    assert_misc_eq(t.items[10].type, TOK_RBRACE);
+
+    Token_array_destroy(&t);
     return 0;
 }
