@@ -26,7 +26,7 @@ void Token_array_destroy(Token_array* t) {
 
 void Token_array_append(Token_array* t, Token item) {
     if (t->size == t->capacity) {
-        t->items = realloc(t->items, t->size * GROWTH_FACTOR * sizeof(Token));
+        t->items = realloc(t->items, t->capacity * GROWTH_FACTOR * sizeof(Token));
         t->capacity = t->size * GROWTH_FACTOR * sizeof(Token);
     }
     t->items[t->size] = item;
