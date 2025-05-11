@@ -7,17 +7,48 @@ repos:
     -   id: check-merge-conflict
     -   id: check-yaml
         additional_dependencies: [ ruamel.yaml>=0.15 ]
+    -   id: debug-statements
     -   id: end-of-file-fixer
+        exclude: "tests/fixture/no_newline_file.txt"
     -   id: trailing-whitespace
   - repo: https://github.com/pre-commit/mirrors-clang-format
     rev: v20.1.0
     hooks:
       - id: clang-format
-        files: src/\w+.c
-  - repo: https://github.com/mrtazz/checkmake.git
-    rev: 0.2.2
+        exclude: ".json"
+  - repo: local
     hooks:
-    -   id: checkmake
+      - id: clang-tidy
+        name: clang-tidy
+        language: system
+        entry: clang-tidy -p build/compile_commands.json -extra-arg=-std=c++23
+        files: cpp
+        exclude: "^build/"
+  - repo: https://github.com/cmake-lint/cmake-lint
+    rev: 1.4.3
+    hooks:
+      - id: cmakelint
+  - repo: https://github.com/asottile/reorder-python-imports
+    rev: v3.14.0
+    hooks:
+    -   id: reorder-python-imports
+        args: [--py310-plus]
+  - repo: https://github.com/asottile/add-trailing-comma
+    rev: v3.1.0
+    hooks:
+    - id: add-trailing-comma
+  - repo: https://github.com/PyCQA/flake8
+    rev: 7.1.2
+    hooks:
+    - id: flake8
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.15.0
+    hooks:
+    - id: mypy
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.7
+    hooks:
+    - id: actionlint
   - repo: https://github.com/sco1/brie-commit
     rev: v1.1.0
     hooks:

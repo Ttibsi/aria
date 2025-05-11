@@ -1,29 +1,61 @@
 #ifndef LEXER_H
 #define LEXER_H
 
-#include <stddef.h>
-#include <stdlib.h>
+#include <format>
+#include <sstream>
+#include <string>
+#include <vector>
 
-#include "definitions.h"
+enum class Token_type {
+    BUILTIN,
+    COLON,
+    FUNCTION,
+    IDENTIFIER,
+    KEYWORD,
+    LBRACE,
+    LBRACKET,
+    LPAREN,
+    NUMERIC_LITERAL,
+    RBRACE,
+    RBRACKET,
+    RPAREN,
+    SEMI,
+    STRING_LITERAL,
+};
 
-typedef struct {
-    Token_type type;
-    char* value;
-} Token;
+struct Token {
+    Token_type tok;
+    std::string value;
 
-typedef struct {
-    Token* items;
-    size_t size;
-    size_t capacity;
-} Token_array;
+    Token(Token_type t, std::string s) : tok(t), value(s) {}
+};
 
-#define GROWTH_FACTOR 2
+std::string token_to_str(Token_type);
 
-Token_array Token_array_create();
-void Token_array_destroy(Token_array*);
-void Token_array_append(Token_array*, Token);
-void Token_array_print(Token_array*);
+struct Lexer {
+    std::vector<Token> Tokens = {};
 
-Token_array lex(char*, size_t);
+    Lexer(const std::string&);
+    [[nodiscard]] bool is_number(const std::string&);
+};
 
-#endif // LEXER_H
+template <>
+struct std::formatter<Lexer> {
+    template <class ParseContext>
+    constexpr ParseContext::iterator parse(ParseContext& ctx) {
+        return ctx.begin();
+    }
+
+    template <class FmtContext>
+    FmtContext::iterator format(Lexer l, FmtContext& ctx) const {
+        std::ostringstream out;
+
+        for (auto&& t : l.Tokens) {
+            out << token_to_str(t.tok) << " (" << t.value << ")\n";
+        }
+
+        return std::ranges::copy(std::move(out).str(), ctx.out()).out;
+    }
+};
+
+#endif  // LEXER_H
