@@ -10,7 +10,8 @@ sources := $(filter-out src/main.cpp,$(wildcard src/*.cpp))
 objects := $(patsubst src/%.cpp,build/%.o,$(sources))
 
 .PHONY: all
-all: $(BIN)
+all:
+	bear -- $(MAKE) $(BIN)
 
 build:
 	mkdir build
