@@ -1,4 +1,4 @@
-CC := g++
+CC := clang++
 CFLAGS := -Wall -Wextra -Wimplicit-fallthrough -g -std=c++23
 BIN := aria
 

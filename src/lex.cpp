@@ -36,29 +36,29 @@ Lexer::Lexer(const std::string& contents) {
         if (!in_string) {
             switch (c) {
                 case '{':
-                    Tokens.push_back({Token_type::LBRACE, std::to_string(c)});
+                    Tokens.emplace_back(Token_type::LBRACE, std::string(1, c));
                     break;
                 case '}':
-                    Tokens.push_back({Token_type::RBRACE, std::to_string(c)});
+                    Tokens.emplace_back(Token_type::RBRACE, std::string(1, c));
                     break;
                 case ':':
-                    Tokens.push_back({Token_type::COLON, std::to_string(c)});
+                    Tokens.emplace_back(Token_type::COLON, std::string(1, c));
                     break;
                 case ';':
-                    Tokens.push_back({Token_type::SEMI, std::to_string(c)});
+                    Tokens.emplace_back(Token_type::SEMI, std::string(1, c));
                     break;
                 case '[':
-                    Tokens.push_back({Token_type::LBRACKET, std::to_string(c)});
+                    Tokens.emplace_back(Token_type::LBRACKET, std::string(1, c));
                     break;
                 case ']':
-                    Tokens.push_back({Token_type::RBRACKET, std::to_string(c)});
+                    Tokens.emplace_back(Token_type::RBRACKET, std::string(1, c));
                     break;
                 case '(':
-                    Tokens.push_back({Token_type::FUNCTION, text.substr(0, text.size() - 1)});
-                    Tokens.push_back({Token_type::LPAREN, std::to_string(c)});
+                    Tokens.emplace_back(Token_type::FUNCTION, text.substr(0, text.size() - 1));
+                    Tokens.emplace_back(Token_type::LPAREN, std::string(1, c));
                     break;
                 case ')':
-                    Tokens.push_back({Token_type::RPAREN, std::to_string(c)});
+                    Tokens.emplace_back(Token_type::RPAREN, std::string(1, c));
                     break;
                 case '"':
                     in_string = true;
@@ -70,18 +70,18 @@ Lexer::Lexer(const std::string& contents) {
         }
 
         if (c == '"') {
-            Tokens.push_back({Token_type::STRING_LITERAL, text});
+            Tokens.emplace_back(Token_type::STRING_LITERAL, text);
             continue;
         }
 
         if (std::isspace(c)) {
             text = text.substr(text.size() - 1);
             if (std::find(keywords.begin(), keywords.end(), text) != keywords.end()) {
-                Tokens.push_back({Token_type::KEYWORD, text});
+                Tokens.emplace_back(Token_type::KEYWORD, text);
             } else if (std::find(builtins.begin(), builtins.end(), text) != builtins.end()) {
-                Tokens.push_back({Token_type::BUILTIN, text});
+                Tokens.emplace_back(Token_type::BUILTIN, text);
             } else if (is_number(text)) {
-                Tokens.push_back({Token_type::NUMERIC_LITERAL, text});
+                Tokens.emplace_back(Token_type::NUMERIC_LITERAL, text);
             }
 
             text = "";

@@ -51,7 +51,7 @@ struct std::formatter<Lexer> {
         std::ostringstream out;
 
         for (auto&& t : l.Tokens) {
-            out << token_to_str(t.tok) << " (" << t.value << ")\n";
+            out << token_to_str(t.tok) << " (\x1b[90m" << t.value << "\x1b[0m)\n";
         }
 
         return std::ranges::copy(std::move(out).str(), ctx.out()).out;
