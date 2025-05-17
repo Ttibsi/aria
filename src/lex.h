@@ -23,6 +23,22 @@ enum class Token_type {
     SEMI,
     STRING_LITERAL,
 };
+std::string token_to_str(Token_type);
+
+template <>
+struct std::formatter<Token_type> {
+    template <class ParseContext>
+    constexpr ParseContext::iterator parse(ParseContext& ctx) {
+        return ctx.begin();
+    }
+
+    template <class FmtContext>
+    FmtContext::iterator format(Token_type t, FmtContext& ctx) const {
+        std::ostringstream out;
+        out << token_to_str(t);
+        return std::ranges::copy(std::move(out).str(), ctx.out()).out;
+    }
+};
 
 struct Token {
     Token_type tok;

@@ -1,6 +1,9 @@
 #include "lex.h"
+
 #include <algorithm>
 #include <cctype>
+#include <regex>
+
 #include "definitions.h"
 
 std::string token_to_str(Token_type tok) {
@@ -96,12 +99,6 @@ void Lexer::tokenizer(const std::string& contents) {
 }
 
 [[nodiscard]] bool Lexer::is_number(const std::string& text) {
-    std::string acceptable = "0123456789.xbo";
-    for (auto&& c : text) {
-        if (acceptable.find(c) == std::string::npos) {
-            return false;
-        }
-    }
-
-    return true;
+    std::regex pattern(R"(^\d+$|^0o[0-7]+$|^0b[0-1]+$|^0x[\dabcdefABCDEF]+$)");
+    return std::regex_match(text, pattern);
 }
