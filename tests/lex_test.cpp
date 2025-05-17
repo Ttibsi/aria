@@ -27,7 +27,7 @@ int test_token_to_str() {
 }
 
 int test_lexer_tokenizer() {
-    std::string text = "func main() { print(\"Hello world\"); })";
+    std::string text = "func main() { print(\"Hello world\"); }";
     Lexer lex = Lexer(text);
     std::vector<Token> expected = {
         {Token_type::KEYWORD, "func"},
@@ -39,7 +39,7 @@ int test_lexer_tokenizer() {
         {Token_type::LPAREN, "("},
         {Token_type::STRING_LITERAL, "\"Hello world\""},
         {Token_type::RPAREN, ")"},
-        {Token_type::SEMI, ":"},
+        {Token_type::SEMI, ";"},
         {Token_type::RBRACE, "}"},
     };
 
