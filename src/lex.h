@@ -68,6 +68,7 @@ struct Lexer {
     Lexer(const std::string&);
     void tokenizer(const std::string&);
     [[nodiscard]] bool is_number(const std::string&);
+    [[nodiscard]] bool is_builtin(const std::string&);
 };
 
 template <>

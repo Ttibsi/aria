@@ -8,5 +8,6 @@ int main() {
         call(test_token_to_str),
         call(test_lexer_tokenizer),
         call(test_lexer_is_number),
+        call(test_lexer_is_builtin),
     }});
 }

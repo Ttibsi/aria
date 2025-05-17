@@ -37,7 +37,7 @@ int test_lexer_tokenizer() {
         {Token_type::LBRACE, "{"},
         {Token_type::BUILTIN, "print"},
         {Token_type::LPAREN, "("},
-        {Token_type::STRING_LITERAL, "Hello world"},
+        {Token_type::STRING_LITERAL, "\"Hello world\""},
         {Token_type::RPAREN, ")"},
         {Token_type::SEMI, ":"},
         {Token_type::RBRACE, "}"},
@@ -69,6 +69,16 @@ int test_lexer_is_number() {
     // binary
     assert_eq(l.is_number("0b00010010"), true);
     assert_eq(l.is_number("0b2"), false);
+
+    return 0;
+}
+
+int test_lexer_is_builtin() {
+    Lexer l = Lexer("");
+
+    assert_eq(l.is_builtin("print"), true);
+
+    assert_eq(l.is_builtin("main"), false);
 
     return 0;
 }
