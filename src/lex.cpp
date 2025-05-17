@@ -19,6 +19,7 @@ std::string token_to_str(Token_type tok) {
         case Token_type::RBRACKET: return "RBRACKET";
         case Token_type::LPAREN: return "LPAREN";
         case Token_type::RPAREN: return "RPAREN";
+        case Token_type::EOF_: return "EOF";
     };
 
     return "";
@@ -26,6 +27,10 @@ std::string token_to_str(Token_type tok) {
 
 // TODO: Escaped literals
 Lexer::Lexer(const std::string& contents) {
+    tokenizer(contents);
+}
+
+void Lexer::tokenizer(const std::string& contents) {
     std::string text = "";
     bool in_string = false;
 

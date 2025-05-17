@@ -9,6 +9,7 @@
 enum class Token_type {
     BUILTIN,
     COLON,
+    EOF_,
     FUNCTION,
     IDENTIFIER,
     KEYWORD,
@@ -30,12 +31,26 @@ struct Token {
     Token(Token_type t, std::string s) : tok(t), value(s) {}
 };
 
-std::string token_to_str(Token_type);
+template <>
+struct std::formatter<Token> {
+    template <class ParseContext>
+    constexpr ParseContext::iterator parse(ParseContext& ctx) {
+        return ctx.begin();
+    }
+
+    template <class FmtContext>
+    FmtContext::iterator format(Token t, FmtContext& ctx) const {
+        std::ostringstream out;
+        out << "Token(" << token_to_str(t.tok) << ", " << t.value << ")\n";
+        return std::ranges::copy(std::move(out).str(), ctx.out()).out;
+    }
+};
 
 struct Lexer {
     std::vector<Token> Tokens = {};
 
     Lexer(const std::string&);
+    void tokenizer(const std::string&);
     [[nodiscard]] bool is_number(const std::string&);
 };
 
