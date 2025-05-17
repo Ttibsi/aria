@@ -16,12 +16,18 @@ repos:
         exclude: ".json"
   - repo: local
     hooks:
-      - id: clang-tidy
-        name: clang-tidy
-        language: system
-        entry: clang-tidy -p build/compile_commands.json -extra-arg=-std=c++23
-        files: cpp
-        exclude: "^build/"
+    - id: clang-tidy
+      name: clang-tidy
+      language: system
+      entry: clang-tidy
+      args:
+      - -p
+      - compile_commands.json
+      - --extra-arg=-std=c++23
+      - --extra-arg=-Iinclude
+      - --extra-arg=-Isrc
+      files: \.cpp$
+      exclude: ^build/
   - repo: https://github.com/mrtazz/checkmake.git
     rev: 0.2.2
     hooks:
