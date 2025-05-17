@@ -10,10 +10,24 @@ repos:
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
   - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v20.1.0
+    rev: v20.1.4
     hooks:
       - id: clang-format
-        files: src/\w+.c
+        exclude: ".json"
+  - repo: local
+    hooks:
+    - id: clang-tidy
+      name: clang-tidy
+      language: system
+      entry: clang-tidy
+      args:
+      - -p
+      - compile_commands.json
+      - --extra-arg=-std=c++23
+      - --extra-arg=-Iinclude
+      - --extra-arg=-Isrc
+      files: \.cpp$
+      exclude: ^build/
   - repo: https://github.com/mrtazz/checkmake.git
     rev: 0.2.2
     hooks:

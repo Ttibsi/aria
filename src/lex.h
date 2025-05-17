@@ -1,29 +1,93 @@
 #ifndef LEXER_H
 #define LEXER_H
 
-#include <stddef.h>
-#include <stdlib.h>
+#include <format>
+#include <sstream>
+#include <string>
+#include <vector>
 
-#include "definitions.h"
+enum class Token_type {
+    BUILTIN,
+    COLON,
+    EOF_,
+    FUNCTION,
+    IDENTIFIER,
+    KEYWORD,
+    LBRACE,
+    LBRACKET,
+    LPAREN,
+    NUMERIC_LITERAL,
+    RBRACE,
+    RBRACKET,
+    RPAREN,
+    SEMI,
+    STRING_LITERAL,
+};
+std::string token_to_str(Token_type);
 
-typedef struct {
-    Token_type type;
-    char* value;
-} Token;
+template <>
+struct std::formatter<Token_type> {
+    template <class ParseContext>
+    constexpr ParseContext::iterator parse(ParseContext& ctx) {
+        return ctx.begin();
+    }
 
-typedef struct {
-    Token* items;
-    size_t size;
-    size_t capacity;
-} Token_array;
+    template <class FmtContext>
+    FmtContext::iterator format(Token_type t, FmtContext& ctx) const {
+        std::ostringstream out;
+        out << token_to_str(t);
+        return std::ranges::copy(std::move(out).str(), ctx.out()).out;
+    }
+};
 
-#define GROWTH_FACTOR 2
+struct Token {
+    Token_type tok;
+    std::string value;
 
-Token_array Token_array_create();
-void Token_array_destroy(Token_array*);
-void Token_array_append(Token_array*, Token);
-void Token_array_print(Token_array*);
+    Token(Token_type t, std::string s) : tok(t), value(s) {}
+};
 
-Token_array lex(char*, size_t);
+template <>
+struct std::formatter<Token> {
+    template <class ParseContext>
+    constexpr ParseContext::iterator parse(ParseContext& ctx) {
+        return ctx.begin();
+    }
 
-#endif // LEXER_H
+    template <class FmtContext>
+    FmtContext::iterator format(Token t, FmtContext& ctx) const {
+        std::ostringstream out;
+        out << "Token(" << token_to_str(t.tok) << ", " << t.value << ")\n";
+        return std::ranges::copy(std::move(out).str(), ctx.out()).out;
+    }
+};
+
+struct Lexer {
+    std::vector<Token> Tokens = {};
+
+    Lexer(const std::string&);
+    void tokenizer(const std::string&);
+    [[nodiscard]] bool is_number(const std::string&);
+    [[nodiscard]] bool is_builtin(const std::string&);
+};
+
+template <>
+struct std::formatter<Lexer> {
+    template <class ParseContext>
+    constexpr ParseContext::iterator parse(ParseContext& ctx) {
+        return ctx.begin();
+    }
+
+    template <class FmtContext>
+    FmtContext::iterator format(Lexer l, FmtContext& ctx) const {
+        std::ostringstream out;
+
+        for (auto&& t : l.Tokens) {
+            out << token_to_str(t.tok) << " (\x1b[90m" << t.value << "\x1b[0m)\n";
+        }
+
+        return std::ranges::copy(std::move(out).str(), ctx.out()).out;
+    }
+};
+
+#endif  // LEXER_H

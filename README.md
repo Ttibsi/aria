@@ -4,4 +4,4 @@ An in-progress interpreted programming language
 
 ## Goals
 * Embeddable (?)
-* Somewhat fast (for an interpreted language) 
+* Somewhat fast (for an interpreted language)

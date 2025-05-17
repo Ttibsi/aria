@@ -1,4 +1,6 @@
 .gdb_history
 iris.log
 aria
-build/ 
+build/
+compile_commands.json
+.cache/
