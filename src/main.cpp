@@ -3,6 +3,7 @@
 #include "vm/aria.h"
 
 int main() {
-    std::println("Hello world");
+    aria::VM ariaVM {};
+    ariaVM.parse_string("var foo: int = 69;");
     return 0;
 }

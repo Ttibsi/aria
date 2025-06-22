@@ -15,7 +15,7 @@ all: $(BIN)
 	...
 
 build:
-	mkdir build
+	mkdir -p build
 
 build/%.o: src/vm/%.cpp | build
 	$(CC) $< -c -MMD -MP -o $@ $(CFLAGS) $(san)
