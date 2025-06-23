@@ -36,4 +36,13 @@ namespace aria {
         }
     }
 
+    [[nodiscard]] std::string Lexer::peek() {
+        return token_name(tokens.at(index).type);
+    }
+
+    [[nodiscard]] std::string Lexer::next() {
+        index++;
+        return peek();
+    }
+
 }  // namespace aria

@@ -13,6 +13,8 @@ namespace aria {
 
             void tokenize(const std::string&);
             void print_tokens(const std::string&);
+            [[nodiscard]] std::string peek();
+            [[nodiscard]] std::string next();
     };
 }  // namespace aria
 
