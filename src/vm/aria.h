@@ -3,11 +3,16 @@
 
 #include <string>
 
+#include "lexer.h"
+
 // The public API for the Aria bytecode virtual machine.
 namespace aria {
     class VM {
-       public:
-        void parse_string(std::string);
+        private:
+            Lexer lexer;
+
+        public:
+            void parse_string(std::string);
     };
 }  // namespace aria
 

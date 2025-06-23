@@ -8,7 +8,7 @@ ifeq (0, 1)
 endif
 
 sources := $(wildcard src/vm/*.cpp)
-objects := build/$(patsubst %.cpp,%.o,$(notdir $(sources)))
+objects := $(addprefix build/,$(patsubst %.cpp,%.o,$(notdir $(sources))))
 
 .PHONY: all
 all: $(BIN)
