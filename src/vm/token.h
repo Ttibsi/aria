@@ -17,7 +17,7 @@ namespace aria {
         END_STMT,
     };
 
-    std::string token_name(TokenType tok) {
+    inline std::string token_name(TokenType tok) {
         switch (tok) {
             using enum TokenType;
             case KEYWORD:
@@ -38,10 +38,10 @@ namespace aria {
     }
 
     struct TokenPattern {
-        const TokenType tok;
-        const std::string_view re;
+            const TokenType tok;
+            const std::string_view re;
 
-        TokenPattern(TokenType tok, std::string_view re) : tok(tok), re(re) {}
+            TokenPattern(TokenType tok, std::string_view re) : tok(tok), re(re) {}
     };
 
     const std::array<TokenPattern, 7> tokenPatterns = std::array {
@@ -57,9 +57,9 @@ namespace aria {
         TokenPattern(TokenType::END_STMT, ";")};
 
     struct Token {
-        TokenType type;
-        int start;
-        int end;
+            TokenType type;
+            int start;
+            int end;
     };
 
 }  // namespace aria

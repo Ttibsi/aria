@@ -39,3 +39,5 @@ SpaceBeforeCpp11BracedList: 'true'
 SpacesInContainerLiterals: 'true'
 Standard: Cpp11
 TabWidth: '4'
+AccessModifierOffset: 0
+IndentAccessModifiers: true
